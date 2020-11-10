@@ -5,8 +5,95 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOnVideoApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Draw on Video POC" Height="auto" Width="auto">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock>Opening your default webcam...</TextBlock>
+        </StackPanel>
+
+        <Viewbox>
+            <Grid>
+                <Image Name="imgPreview" Stretch="Uniform" Grid.Column="0" Grid.Row="0" Width="640" Height="480" />
+
+                <InkCanvas EditingMode="Ink" Grid.Row="0" Grid.Column="0" x:Name="inkCanvas" Background="Transparent" Width="640" Height="480" >
+                    <InkCanvas.DefaultDrawingAttributes>
+                        <DrawingAttributes Color="Red" Width="5"></DrawingAttributes>
+                    </InkCanvas.DefaultDrawingAttributes>
+                </InkCanvas>
+            </Grid>
+        </Viewbox>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 0 25 0">
+                <TextBlock VerticalAlignment="Top">Brush color:</TextBlock>
+                <RadioButton x:Name="rbtnRed" Click="rbtColor_Click" Content="Red">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="red"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <RadioButton x:Name="rbtnGreen" Click="rbtColor_Click" Content="Green">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="Green"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <RadioButton x:Name="rbtnBlue" Click="rbtColor_Click" Content="Blue">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}" >
+                            <Setter Property="Background" Value="Blue"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <RadioButton x:Name="rbtnGray" Click="rbtColor_Click" Content="Gray">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="Gray"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <RadioButton x:Name="rbtnWhite" Click="rbtColor_Click" Content="White">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <RadioButton x:Name="rbtnBlack" Click="rbtColor_Click" Content="Black">
+                    <RadioButton.Resources>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="Background" Value="Black"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3 0 10 0"></Setter>
+                        </Style>
+                    </RadioButton.Resources>
+                </RadioButton>
+                <Button x:Name="btnclearInkCanvas" Content="Clear Canvas" Click="btnclearInkCanvas_Click"></Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnStartRecordVideo" Content="Start Recording Video"  Margin="5 0" Click="btnRecordVideo_Click" VerticalAlignment="Top"></Button>
+                <Button x:Name="btnStopRecordVideo" Content="Stop Recording Video"  Margin="5 0" Click="btnStopRecordVideo_Click"  VerticalAlignment="Top" IsEnabled="false"></Button>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
