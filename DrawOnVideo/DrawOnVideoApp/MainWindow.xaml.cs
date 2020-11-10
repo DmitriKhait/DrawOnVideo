@@ -23,11 +23,13 @@ namespace DrawOnVideoApp
         VideoCapture _capture;
         VideoWriter _videoWriter = null;
         bool _recording = false, _closing = false;
-        int _frameWidth = 0, _frameHeight = 0;
+        int _frameWidth = 640, _frameHeight = 480;
         Mat _backGroundMat = new Mat();
         Bitmap _backGroundBitmap = null;
-        string outputDirectory = @"c:\temp";
-        string outputFileName = "video.mp4";
+        string _outputDirectory = @"c:\temp";
+        string _outputFileName = "video.mp4";
+        string _outputScreenshotFile = "screenshot_{0}.jpg";
+        bool _saveScreenShot = false;
 
         Bitmap overlay = null, resultFrame = null, videoFrame = null;
 
@@ -84,12 +86,21 @@ namespace DrawOnVideoApp
                 if (Application.Current != null && !_closing)
                     Application.Current.Dispatcher.Invoke(new Action(() => { imgPreview.Source = ImageSourceFromBitmap(_backGroundBitmap); }));
 
-                if (_recording)
+
+                if (_recording || _saveScreenShot)
                 {
                     Application.Current.Dispatcher.Invoke(new Action(() => { overlay = RenderTargetToBitmap(inkCanvas); }));
 
                     resultFrame = Overlay(_backGroundBitmap, overlay);
-                    _videoWriter.Write(resultFrame.ToImage<Bgra, byte>().Mat);
+
+                    if (_saveScreenShot)
+                    {
+                        resultFrame.Save(string.Format(System.IO.Path.Combine(_outputDirectory, _outputScreenshotFile), DateTime.Now.ToString("yyyyMMdd_hhmmss")));
+                        _saveScreenShot = false;
+                    }
+
+                    if (_recording)
+                        _videoWriter.Write(resultFrame.ToImage<Bgra, byte>().Mat);
                 }
             }
         }
@@ -143,6 +154,12 @@ namespace DrawOnVideoApp
             inkCanvas.DefaultDrawingAttributes.Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(color);
         }
 
+        private void btnSaveFrame_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists(_outputDirectory)) Directory.CreateDirectory(_outputDirectory);
+            _saveScreenShot = true;
+        }
+
         private void btnclearInkCanvas_Click(object sender, RoutedEventArgs e)
         {
             inkCanvas.Strokes.Clear();
@@ -171,8 +188,8 @@ namespace DrawOnVideoApp
             _frameHeight = (int)_capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameHeight);
             double fps = (int)_capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
 
-            if (!Directory.Exists(outputDirectory)) Directory.CreateDirectory(outputDirectory);
-            _videoWriter = new VideoWriter(System.IO.Path.Combine(outputDirectory, outputFileName), fourcc, 25, new System.Drawing.Size(_frameWidth, _frameHeight), true); // TODO: hardcoded FPS
+            if (!Directory.Exists(_outputDirectory)) Directory.CreateDirectory(_outputDirectory);
+            _videoWriter = new VideoWriter(System.IO.Path.Combine(_outputDirectory, _outputFileName), fourcc, 25, new System.Drawing.Size(_frameWidth, _frameHeight), true); // TODO: hardcoded FPS
 
             btnStartRecordVideo.IsEnabled = false;
             btnStopRecordVideo.IsEnabled = true;

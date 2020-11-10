@@ -93,6 +93,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="btnStartRecordVideo" Content="Start Recording Video"  Margin="5 0" Click="btnRecordVideo_Click" VerticalAlignment="Top"></Button>
                 <Button x:Name="btnStopRecordVideo" Content="Stop Recording Video"  Margin="5 0" Click="btnStopRecordVideo_Click"  VerticalAlignment="Top" IsEnabled="false"></Button>
+                <Button x:Name="btnSaveFrame" Content="Save Screenshot"  Margin="5 0"  VerticalAlignment="Top" Click="btnSaveFrame_Click"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>
